@@ -12,22 +12,22 @@ const listAll = async (req, res, next) => {
     });
   }
 };
-
 const saveTokens = async (req, res) => {
   try {
-    const movie = new CommingSoonMovies.tokens();
-    movie.token = req.body.token;
+    const token = req.body.token;
+    const existingToken = await CommingSoonMovies.tokens.findOne({ token });
 
-    await movie.save();
+    if (existingToken) {
+      return res.status(400).json({ message: "Token ja existe" });
+    }
 
-    res.status(200).json({
-      message: `Token salvo`,
-    });
+    const newToken = new CommingSoonMovies.tokens({ token });
+    await newToken.save();
+
+    res.status(200).json({ message: "Token salvo com sucesso" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({
-      message: `Falha ao salvar token`,
-    });
+    res.status(500).json({ message: "Falha ao salvar token" });
   }
 };
 

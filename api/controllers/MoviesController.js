@@ -12,13 +12,14 @@ const listAll = async (req, res, next) => {
     });
   }
 };
+
 const saveTokens = async (req, res) => {
   try {
     const token = req.body.token;
     const existingToken = await CommingSoonMovies.tokens.findOne({ token });
 
     if (existingToken) {
-      return res.status(400).json({ message: "Token ja existe" });
+      return res.json({ message: "Token já existe" });
     }
 
     const newToken = new CommingSoonMovies.tokens({ token });
@@ -30,7 +31,6 @@ const saveTokens = async (req, res) => {
     res.status(500).json({ message: "Falha ao salvar token" });
   }
 };
-
 
 module.exports = {
   listAll,

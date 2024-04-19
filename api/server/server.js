@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 const DB_USER = process.env.DB_USER;
 const DB_PASSWORD = process.env.DB_PASSWORD;
 const PORT = process.env.PORT;
-const uri = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.sgo1p.mongodb.net/financials`;
+const uri = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@tokens.kncyibo.mongodb.net/tokens`;
 
 mongoose
   .connect(uri)

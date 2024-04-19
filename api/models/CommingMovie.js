@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const tokens = new Schema({
   token: String,
+  celulares: [String],
 });
 
 const schemas = {

@@ -12,23 +12,40 @@ const listAll = async (req, res, next) => {
     });
   }
 };
-
 const saveTokens = async (req, res) => {
   try {
-    const token = req.body.token;
+    const { token, celulares } = req.body;
+
     const existingToken = await CommingSoonMovies.tokens.findOne({ token });
 
-    if (existingToken) {
-      return res.json({ message: "Token já existe" });
+    if (existingToken && celulares) {
+      if (existingToken?.celulares.includes(celulares)) {
+        return res.json({
+          message: "Número de celular ja adicionado",
+        });
+      } else {
+        existingToken.celulares.push(celulares);
+        await existingToken.save();
+        return res.json({
+          message: "Número de celular adicionado ao token existente",
+        });
+      }
+    } else if (existingToken) {
+      return res.json({
+        message: "Token já existe",
+      });
     }
 
-    const newToken = new CommingSoonMovies.tokens({ token });
+    const newToken = new CommingSoonMovies.tokens({
+      token,
+      celulares: [celulares],
+    });
     await newToken.save();
 
-    res.status(200).json({ message: "Token salvo com sucesso" });
+    return res.status(200).json({ message: "Token salvo com sucesso" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Falha ao salvar token" });
+    return res.status(500).json({ message: "Falha ao salvar token" });
   }
 };
 
